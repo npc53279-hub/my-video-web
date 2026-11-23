@@ -13,6 +13,15 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from mcp.server.mcpserver import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
+
+mcp = MCPServer(
+    "iPadAutoVideoMCP",
+    stateless_http=True,
+    streamable_http_path="/",
+    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+)
+
 
 
 BASE_DIR = Path(__file__).parent.resolve()
@@ -248,4 +257,7 @@ async def watch_page(job_id: str):
         </html>
         """
 
-app.mount("/mcp", mcp.streamable_http_app())
+mcp_asgi = mcp.streamable_http_app()
+app.add_route("/mcp", mcp_asgi, methods=["GET", "POST", "DELETE", "OPTIONS"])
+app.mount("/mcp", mcp_asgi)
+
