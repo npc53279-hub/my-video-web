@@ -17,10 +17,10 @@ from mcp.server.transport_security import TransportSecuritySettings
 
 mcp = MCPServer(
     "iPadAutoVideoMCP",
-    stateless_http=True,
     streamable_http_path="/",
     transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
 )
+
 
 
 
@@ -257,7 +257,6 @@ async def watch_page(job_id: str):
         </html>
         """
 
-mcp_asgi = mcp.streamable_http_app()
+mcp_asgi = mcp.streamable_http_app(stateless_http=True)
 app.add_route("/mcp", mcp_asgi, methods=["GET", "POST", "DELETE", "OPTIONS"])
 app.mount("/mcp", mcp_asgi)
-
