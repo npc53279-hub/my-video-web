@@ -25,7 +25,8 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 PUBLIC_URL = os.getenv("PUBLIC_URL", "http://localhost:8000").rstrip("/")
 
 ai_client = genai.Client(api_key=GEMINI_API_KEY)
-mcp = MCPServer("iPadAutoVideoMCP", stateless_http=True)
+mcp = MCPServer("iPadAutoVideoMCP", stateless_http=True, streamable_http_path="/")
+
 
 app = FastAPI(title="My Video Studio MCP")
 
