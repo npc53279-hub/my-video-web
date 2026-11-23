@@ -12,7 +12,8 @@ from google.genai import types
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
+
 
 BASE_DIR = Path(__file__).parent.resolve()
 OUTPUT_DIR = BASE_DIR / "outputs"
@@ -24,7 +25,8 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 PUBLIC_URL = os.getenv("PUBLIC_URL", "http://localhost:8000").rstrip("/")
 
 ai_client = genai.Client(api_key=GEMINI_API_KEY)
-mcp = FastMCP("iPadAutoVideoMCP")
+mcp = MCPServer("iPadAutoVideoMCP", stateless_http=True)
+
 app = FastAPI(title="My Video Studio MCP")
 
 app.mount("/files", StaticFiles(directory=str(OUTPUT_DIR)), name="files")
